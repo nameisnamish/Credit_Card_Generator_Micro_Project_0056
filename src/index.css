@@ -1,0 +1,514 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap');
+
+:root {
+  --very-dark-violet: #1e0927;
+  --dark-grayish-violet: #8f8694;
+  --light-grayish-violet: #dfdee0;
+  --input-bg: #e5e5e7;
+  --white: #ffffff;
+  --error-red: #ff5252;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+body {
+  background-color: #d1d1d6;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Main Layout */
+.app-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  position: relative;
+  background-color: #dedee2;
+  overflow: hidden;
+}
+
+/* Left gradient section (approx 34% width) */
+.sidebar-bg {
+  width: 34%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 30%, #300c42 0%, #150024 60%, #0d0017 100%);
+  position: relative;
+}
+
+.sidebar-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 80% 20%, rgba(160, 30, 210, 0.45) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(210, 60, 90, 0.35) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Main content (right side ~66%) */
+.main-content {
+  width: 66%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 18vw;
+}
+
+/* Cards Wrapper */
+.cards-container {
+  position: absolute;
+  left: 12vw;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  height: 490px;
+  width: 520px;
+  perspective: 1000px;
+}
+
+/* Base Ultra-Premium Card */
+.card {
+  width: 430px;
+  height: 242px;
+  border-radius: 16px;
+  position: absolute;
+  box-shadow: 
+    0 25px 50px -12px rgba(13, 0, 23, 0.5),
+    0 15px 30px -8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.5);
+  color: var(--white);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  backdrop-filter: blur(10px);
+}
+
+.card:hover {
+  transform: translateY(-8px) rotateX(4deg) rotateY(-4deg);
+  box-shadow: 
+    0 40px 80px -15px rgba(13, 0, 23, 0.65),
+    0 20px 40px -10px rgba(0, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Front Card - Ultra Luxury Deep Metallic Gradient & Ambient Glow */
+.card-front {
+  top: 0;
+  left: 0;
+  z-index: 2;
+  background: 
+    /* Specular glass reflection diagonal sweep */
+    linear-gradient(120deg, transparent 25%, rgba(255, 255, 255, 0.18) 38%, rgba(255, 255, 255, 0.38) 42%, rgba(255, 255, 255, 0.08) 46%, transparent 65%),
+    /* Micro metallic shimmer texture overlay */
+    radial-gradient(circle at 86% 16%, rgba(225, 95, 75, 0.85) 0%, rgba(185, 45, 100, 0.65) 24%, transparent 52%),
+    radial-gradient(circle at 64% 75%, rgba(70, 130, 200, 0.8) 0%, rgba(110, 55, 185, 0.6) 34%, transparent 64%),
+    radial-gradient(circle at 45% 10%, rgba(190, 50, 210, 0.9) 0%, transparent 48%),
+    /* Deep rich velvet purple metallic base */
+    linear-gradient(135deg, #4726bf 0%, #661fb5 35%, #521690 68%, #360c60 100%);
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Polished Metallic Bevel Frame */
+.card-front::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.2) 40%, rgba(255, 255, 255, 0.1) 70%, rgba(255, 255, 255, 0.6) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.card-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-circle-large {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #ffffff 0%, #e2e2e8 50%, #b8b8c0 100%);
+  border-radius: 50%;
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.9),
+    0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+.logo-circle-small {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid #e8e8ed;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+}
+
+/* Gold Brushed Metallic EMV Chip */
+.emv-chip {
+  width: 42px;
+  height: 32px;
+  background: linear-gradient(135deg, #ffe082 0%, #d4af37 40%, #aa8c2c 70%, #fef0b3 100%);
+  border-radius: 6px;
+  position: relative;
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.8),
+    0 2px 6px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(138, 109, 23, 0.6);
+  overflow: hidden;
+}
+
+.chip-line.horizontal {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: rgba(90, 70, 10, 0.4);
+  transform: translateY(-50%);
+}
+
+.chip-line.vertical {
+  position: absolute;
+  left: 35%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: rgba(90, 70, 10, 0.4);
+}
+
+.card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Deep Embossed Silver/White Metallic Typography */
+.card-number-display {
+  font-size: 26px;
+  letter-spacing: 3.5px;
+  font-weight: 500;
+  color: #f8f8fa;
+  word-spacing: 2px;
+  text-shadow: 
+    0 -1px 1px rgba(0, 0, 0, 0.9),
+    0 1px 2px rgba(255, 255, 255, 0.5),
+    0 3px 6px rgba(0, 0, 0, 0.45);
+}
+
+.card-info-bottom {
+  display: flex;
+  justify-content: space-between;
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 2.5px;
+  color: #e2e2e8;
+  font-weight: 500;
+  text-shadow: 
+    0 -1px 1px rgba(0, 0, 0, 0.8),
+    0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+/* Back Card - Platinum Brushed Metal Finish */
+.card-back {
+  bottom: 0;
+  left: 90px;
+  z-index: 1;
+  background: 
+    linear-gradient(120deg, transparent 25%, rgba(255, 255, 255, 0.3) 38%, rgba(255, 255, 255, 0.5) 42%, transparent 60%),
+    linear-gradient(145deg, #e8e8ec 0%, #c8c8cf 35%, #a4a4ad 70%, #84848d 100%);
+  color: #555;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.black-stripe {
+  background-color: #2f2f2f;
+  height: 46px;
+  width: 100%;
+  margin-top: 22px;
+}
+
+.cvc-stripe {
+  background-color: #a6abb3;
+  height: 38px;
+  width: 82%;
+  margin: 18px auto 0 auto;
+  border-radius: 4px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 18px;
+}
+
+.cvc-display {
+  color: var(--white);
+  font-size: 13px;
+  letter-spacing: 2.5px;
+  font-weight: 700;
+}
+
+.card-back-lines {
+  margin: 22px auto 0 auto;
+  width: 48%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+}
+
+.card-line {
+  height: 4px;
+  background-color: #92979e;
+  border-radius: 2px;
+  width: 100%;
+}
+.card-line.short {
+  width: 60%;
+}
+
+/* Form Container */
+.form-container {
+  width: 360px;
+}
+
+.credit-card-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: #1e0927;
+}
+
+.form-input {
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 8px;
+  border: 1px solid #d4d4d8;
+  background-color: #dcdce0;
+  font-size: 17px;
+  outline: none;
+  color: #1e0927;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.form-input::placeholder {
+  color: #a0a0a8;
+}
+
+.form-input:focus {
+  border-color: #610595;
+  background-color: #e4e4e8;
+  box-shadow: 0 0 0 1px #610595;
+}
+
+.form-input.input-error {
+  border-color: var(--error-red) !important;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.exp-date-inputs {
+  display: flex;
+  gap: 8px;
+}
+
+.error-message {
+  color: var(--error-red);
+  font-size: 11px;
+  margin-top: 3px;
+  font-weight: 500;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background-color: #13001e;
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 8px;
+  letter-spacing: 1px;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-submit:hover {
+  background-color: #28053a;
+}
+
+.btn-submit:active {
+  transform: scale(0.99);
+}
+
+/* Success Toast Notification */
+.toast-success {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  background-color: #10b981;
+  color: white;
+  padding: 14px 22px;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  z-index: 100;
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Complete State */
+.completed-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 22px;
+}
+
+.icon-complete {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #6348fe 0%, #610595 100%);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 36px;
+}
+
+.completed-title {
+  font-size: 26px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #1e0927;
+}
+
+.completed-text {
+  color: #8f8694;
+  font-size: 16px;
+}
+
+/* Mobile & Tablet Responsiveness */
+@media (max-width: 1024px) {
+  .app-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    background-color: #cfcfd4;
+  }
+
+  .sidebar-bg {
+    width: 100%;
+    height: 240px;
+  }
+
+  .main-content {
+    width: 100%;
+    height: auto;
+    justify-content: center;
+    padding: 150px 24px 60px 24px;
+  }
+
+  .cards-container {
+    left: 50%;
+    top: 190px;
+    transform: translateX(-50%);
+    width: 340px;
+    height: 270px;
+  }
+
+  .card {
+    width: 286px;
+    height: 160px;
+    border-radius: 10px;
+  }
+
+  .card-front {
+    top: 90px;
+    left: 0;
+    padding: 18px;
+  }
+
+  .card-back {
+    top: 0;
+    left: 54px;
+  }
+
+  .card-number-display {
+    font-size: 16px;
+    letter-spacing: 2px;
+  }
+
+  .card-info-bottom {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+  }
+
+  .logo-circle-large {
+    width: 30px;
+    height: 30px;
+  }
+
+  .logo-circle-small {
+    width: 12px;
+    height: 12px;
+  }
+
+  .form-container {
+    width: 100%;
+    max-width: 360px;
+  }
+}
