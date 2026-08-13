@@ -17,13 +17,27 @@ const CardDetailsForm = ({ onSubmitSuccess, onFormChange, currentValues }) => {
 
     // Formatting rules for live typing
     if (name === 'name') {
-      // Allow only letters and spaces
-      formattedValue = value.replace(/[^a-zA-Z\s]/g, '');
+      // Allow letters, spaces, hyphens, and apostrophes
+      formattedValue = value.replace(/[^a-zA-Z\s'-]/g, '');
     } else if (name === 'number') {
-      // Allow only numbers and spaces, limit length
+      // Allow only numbers and spaces, max 16 digits
       const cleaned = value.replace(/\D/g, '').slice(0, 16);
       formattedValue = cleaned.replace(/(.{4})/g, '$1 ').trim();
-    } else if (name === 'expMonth' || name === 'expYear') {
+    } else if (name === 'expMonth') {
+      const cleaned = value.replace(/\D/g, '').slice(0, 2);
+      if (cleaned.length === 2) {
+        const num = parseInt(cleaned, 10);
+        if (num > 12) {
+          formattedValue = '12';
+        } else if (num === 0) {
+          formattedValue = '01';
+        } else {
+          formattedValue = cleaned;
+        }
+      } else {
+        formattedValue = cleaned;
+      }
+    } else if (name === 'expYear') {
       formattedValue = value.replace(/\D/g, '').slice(0, 2);
     } else if (name === 'cvc') {
       formattedValue = value.replace(/\D/g, '').slice(0, 3);
@@ -43,13 +57,40 @@ const CardDetailsForm = ({ onSubmitSuccess, onFormChange, currentValues }) => {
     }
   };
 
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    let formattedValue = value.trim();
+
+    if (name === 'expMonth' && formattedValue.length > 0) {
+      const num = parseInt(formattedValue, 10);
+      if (!isNaN(num) && num >= 1 && num <= 12) {
+        formattedValue = num.toString().padStart(2, '0');
+      } else if (num === 0) {
+        formattedValue = '01';
+      }
+    } else if (name === 'expYear' && formattedValue.length === 1) {
+      const num = parseInt(formattedValue, 10);
+      if (!isNaN(num)) {
+        formattedValue = num.toString().padStart(2, '0');
+      }
+    }
+
+    if (formattedValue !== value) {
+      const updatedForm = { ...formData, [name]: formattedValue };
+      setFormData(updatedForm);
+      if (onFormChange) {
+        onFormChange(updatedForm);
+      }
+    }
+  };
+
   const validateForm = () => {
     const newErrors = {};
 
     // Name validation
     if (!formData.name.trim()) {
       newErrors.name = "Can't be blank";
-    } else if (!/^[a-zA-Z\s]+$/.test(formData.name.trim())) {
+    } else if (!/^[a-zA-Z\s'-]+$/.test(formData.name.trim())) {
       newErrors.name = "Wrong format, letters only";
     }
 
@@ -70,8 +111,8 @@ const CardDetailsForm = ({ onSubmitSuccess, onFormChange, currentValues }) => {
       newErrors.expMonth = "Wrong format";
     } else {
       const monthNum = parseInt(formData.expMonth, 10);
-      if (monthNum < 1 || monthNum > 12) {
-        newErrors.expMonth = "Invalid month";
+      if (formData.expMonth.length !== 2 || monthNum < 1 || monthNum > 12) {
+        newErrors.expMonth = "Must be a valid 2-digit month (01-12)";
       }
     }
 
@@ -80,7 +121,7 @@ const CardDetailsForm = ({ onSubmitSuccess, onFormChange, currentValues }) => {
       newErrors.expYear = "Can't be blank";
     } else if (!/^\d+$/.test(formData.expYear)) {
       newErrors.expYear = "Wrong format";
-    } else if (formData.expYear.length < 2) {
+    } else if (formData.expYear.length !== 2) {
       newErrors.expYear = "Must be 2 digits";
     }
 
@@ -90,7 +131,7 @@ const CardDetailsForm = ({ onSubmitSuccess, onFormChange, currentValues }) => {
     } else if (!/^\d+$/.test(formData.cvc)) {
       newErrors.cvc = "Wrong format, numbers only";
     } else if (formData.cvc.length !== 3) {
-      newErrors.cvc = "Must be exactly 3 digits";
+      newErrors.cvc = "Must be 3 digits";
     }
 
     setErrors(newErrors);
@@ -157,6 +198,7 @@ const CardDetailsForm = ({ onSubmitSuccess, onFormChange, currentValues }) => {
                 placeholder="MM"
                 value={formData.expMonth}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 maxLength={2}
               />
               <input
@@ -167,6 +209,7 @@ const CardDetailsForm = ({ onSubmitSuccess, onFormChange, currentValues }) => {
                 placeholder="YY"
                 value={formData.expYear}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 maxLength={2}
               />
             </div>
